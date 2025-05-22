@@ -1,0 +1,7 @@
+[options]
+library = "PolkitAgent"
+version = "1.0"
+work_mode = "sys"
+target_path = "."
+external_libraries = ["GLib", "GObject", "Gio", "Polkit"]
+girs_directories = ["../misc"]

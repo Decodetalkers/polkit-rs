@@ -1,0 +1,14 @@
+[package]
+name = "polkit"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+
+[features]
+v0_101 = []
+
+[dependencies]
+bitflags.workspace = true
+glib.workspace = true
+gio.workspace = true
+polkit-sys.workspace = true

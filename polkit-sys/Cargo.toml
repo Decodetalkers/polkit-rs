@@ -1,0 +1,33 @@
+[package]
+name = "polkit-sys"
+version = "0.1.0"
+edition = "2024"
+build = "build.rs"
+
+[package.metadata.system-deps.polkit_gobject_1]
+name = "polkit-gobject-1"
+version = "0"
+
+[package.metadata.system-deps.polkit_gobject_1.v0_101]
+version = "0.101"
+
+[package.metadata.docs.rs]
+rustc-args = ["--cfg", "docsrs"]
+rustdoc-args = ["--cfg", "docsrs", "--generate-link-to-definition"]
+all-features = true
+
+[dependencies]
+libc.workspace = true
+glib-sys.workspace = true
+gio-sys.workspace = true
+gobject-sys.workspace = true
+
+[build-dependencies]
+system-deps = "7"
+
+[dev-dependencies]
+shell-words = "1.0.0"
+tempfile = "3"
+
+[features]
+v0_101 = []

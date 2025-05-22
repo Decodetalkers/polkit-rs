@@ -1,0 +1,49 @@
+[options]
+library = "Polkit"
+version = "1.0"
+work_mode = "normal"
+target_path = "."
+generate_safety_asserts = false
+trust_return_value_nullability = true
+deprecate_by_min_version = true
+girs_directories = ["../misc"]
+
+external_libraries = [
+	"GLib",
+	"GObject",
+	"Gio",
+]
+
+generate = [
+	"Polkit.*",
+	"Polkit.ActionDescription",
+	"Polkit.Authority",
+	"Polkit.AuthorityFeatures",
+	"Polkit.AuthorizationResult",
+	"Polkit.CheckAuthorizationFlags",
+	"Polkit.Details",
+	"Polkit.Error",
+	"Polkit.Identity",
+	"Polkit.ImplicitAuthorization",
+	"Polkit.Permission",
+	"Polkit.Subject",
+	"Polkit.SystemBusName",
+	"Polkit.TemporaryAuthorization",
+	"Polkit.UnixGroup",
+	"Polkit.UnixNetgroup",
+	"Polkit.UnixProcess",
+	"Polkit.UnixSession",
+	"Polkit.UnixUser",
+]
+
+manual = [
+	"GLib.String",
+	"GLib.Variant",
+	"GLib.Error",
+	"GObject.Object",
+	"GObject.Value",
+	"Gio.Cancellable",
+	"Gio.Permission",
+	"Gio.AsyncResult",
+	"Gio.AsyncReadyCallback",
+]

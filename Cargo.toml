@@ -1,0 +1,30 @@
+[workspace]
+members = ["./polkit-sys", "./polkit", "./polkit-agent", "./polkit-agent-sys"]
+
+resolver = "3"
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+authors = ["Decodertalkers <aakari@tutanota.com>"]
+keywords = ["PolicyKit", "PolKit", "libpolkit-gobject"]
+categories = ["api-bindings", "authentication", "os::unix-apis"]
+description = "High-level bindings for libpolkit-gobject-1"
+license = "0BSD OR Unlicense"
+readme = "../README.md"
+homepage = "https://codeberg.org/valpackett/polkit-rs"
+repository = "https://codeberg.org/valpackett/polkit-rs"
+documentation = "https://docs.rs/polkit/"
+
+[workspace.dependencies]
+polkit = { version = "0.1.0", path = "./polkit" }
+polkit-sys = { version = "0.1.0", path = "./polkit-sys" }
+polkit-agent-sys = { version = "0.1.0", path = "./polkit-agent-sys" }
+polkit-agent = { version = "0.1.0", path = "./polkit-agent" }
+bitflags = "2"
+glib = "0.20"
+gio = "0.20"
+
+glib-sys = "0.20"
+gobject-sys = "0.20"
+gio-sys = "0.20"
+libc = "0.2"

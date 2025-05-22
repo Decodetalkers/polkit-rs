@@ -1,0 +1,31 @@
+[options]
+library = "PolkitAgent"
+version = "1.0"
+work_mode = "normal"
+target_path = "."
+generate_safety_asserts = false
+trust_return_value_nullability = true
+deprecate_by_min_version = true
+girs_directories = ["../misc"]
+
+external_libraries = ["GLib", "GObject", "Gio", "Polkit"]
+
+generate = [
+	"PolkitAgent.*",
+	"PolkitAgent.RegisterFlags",
+	"PolkitAgent.Session",
+	"PolkitAgent.Listener",
+]
+
+manual = [
+	"GLib.String",
+	"GLib.Variant",
+	"GLib.Error",
+	"GObject.Object",
+	"GObject.Value",
+	"Gio.Cancellable",
+	"Gio.Permission",
+	"Polkit.Identity",
+	"Polkit.Details",
+	"Polkit.Subject",
+]

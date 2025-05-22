@@ -1,0 +1,15 @@
+[options]
+library = "Polkit"
+version = "1.0"
+work_mode = "sys"
+target_path = "."
+generate_safety_asserts = false
+trust_return_value_nullability = true
+deprecate_by_min_version = true
+girs_directories = ["../../misc"]
+
+external_libraries = [
+	"GLib",
+	"GObject",
+	"Gio",
+]

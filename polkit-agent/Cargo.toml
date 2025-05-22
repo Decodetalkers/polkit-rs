@@ -1,0 +1,11 @@
+[package]
+name = "polkit-agent"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+bitflags.workspace = true
+glib.workspace = true
+gio.workspace = true
+polkit-agent-sys.workspace = true
+polkit.workspace = true
