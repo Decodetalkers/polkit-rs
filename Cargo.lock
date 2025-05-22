@@ -312,6 +312,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "polkit-min"
+version = "0.1.0"
+dependencies = [
+ "glib",
+ "polkit-agent",
+]
+
+[[package]]
 name = "polkit-sys"
 version = "0.1.0"
 dependencies = [

@@ -1,5 +1,11 @@
 [workspace]
-members = ["./polkit-sys", "./polkit", "./polkit-agent", "./polkit-agent-sys"]
+members = [
+	"./polkit-sys",
+	"./polkit",
+	"./polkit-agent",
+	"./polkit-agent-sys",
+	"examples/*",
+]
 
 resolver = "3"
 [workspace.package]
