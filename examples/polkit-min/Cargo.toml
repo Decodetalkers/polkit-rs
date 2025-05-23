@@ -1,0 +1,20 @@
+[package]
+name = "polkit-min"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+keywords.workspace = true
+categories.workspace = true
+description.workspace = true
+license.workspace = true
+readme.workspace = true
+homepage.workspace = true
+repository.workspace = true
+documentation.workspace = true
+
+[dependencies]
+polkit-agent.workspace = true
+glib.workspace = true
+nix = { workspace = true, features = ["process"] }
+rpassword = "7.4.0"
+dialoguer = { version = "0.11.0", features = ["fuzzy-select"] }

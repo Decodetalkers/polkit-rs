@@ -1,8 +1,4 @@
-use polkit_sys as ffi;
-
-pub mod reexport {
-    pub use polkit_sys::*;
-}
+pub use polkit_sys as ffi;
 
 #[allow(unused_imports)]
 #[allow(non_snake_case)]

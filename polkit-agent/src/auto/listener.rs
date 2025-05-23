@@ -41,12 +41,7 @@ impl Listener {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Listener>> Sealed for T {}
-}
-
-pub trait ListenerExt: IsA<Listener> + sealed::Sealed + 'static {
+pub trait ListenerExt: IsA<Listener> + 'static {
     #[doc(alias = "polkit_agent_listener_initiate_authentication")]
     fn initiate_authentication<P: FnOnce(Result<(), glib::Error>) + 'static>(
         &self,
