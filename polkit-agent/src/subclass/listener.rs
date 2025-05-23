@@ -90,9 +90,7 @@ unsafe extern "C" fn initiate_authentication_finish<T: ListenerImpl>(
 
 impl<T: ListenerImpl> ListenerImplExt for T {}
 
-pub trait ListenerImpl: ObjectImpl + ObjectSubclass<Type: IsA<Listener>> {}
-
-pub trait ListenerImplExt: ListenerImpl {
+pub trait ListenerImpl: ObjectImpl + ObjectSubclass<Type: IsA<Listener>> {
     fn initilate_authentication(
         &self,
         _action_id: &str,
@@ -114,3 +112,5 @@ pub trait ListenerImplExt: ListenerImpl {
         false
     }
 }
+
+pub trait ListenerImplExt: ListenerImpl {}
