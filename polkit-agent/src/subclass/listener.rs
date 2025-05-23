@@ -4,10 +4,12 @@ use crate::Listener;
 use crate::ffi;
 use gio::ffi::g_task_new;
 use glib::GString;
+use glib::object::Cast;
 use glib::translate::FromGlibPtrBorrow;
 use glib::translate::FromGlibPtrNone;
 use glib::translate::IntoGlib;
 use glib::translate::from_glib_none;
+use glib::value::ValueType;
 use glib::{object::IsA, subclass::prelude::*};
 
 unsafe impl<T: ListenerImpl> IsSubclassable<T> for Listener {
@@ -52,7 +54,7 @@ unsafe extern "C" fn initiate_authentication<T: ListenerImpl>(
     user_data: glib::ffi::gpointer,
 ) {
     let task = unsafe { g_task_new(ptr as *mut _, cancellable, callback, user_data) };
-    let task: gio::Task<String> = unsafe { from_glib_none(task) };
+    let task: gio::Task<T::Message> = unsafe { from_glib_none(task) };
     let instance = unsafe { &*(ptr as *mut T::Instance) };
     let imp = instance.imp();
 
@@ -75,6 +77,7 @@ unsafe extern "C" fn initiate_authentication<T: ListenerImpl>(
         task,
     );
 }
+
 unsafe extern "C" fn initiate_authentication_finish<T: ListenerImpl>(
     ptr: *mut ffi::PolkitAgentListener,
     gio_result: *mut gio::ffi::GAsyncResult,
@@ -83,16 +86,21 @@ unsafe extern "C" fn initiate_authentication_finish<T: ListenerImpl>(
     unsafe {
         let gio_result: gio::AsyncResult = from_glib_none(gio_result);
         let error: Option<glib::Error> = from_glib_none(*error);
+        let finish_res_pre = error.map(|err| Err(err));
+        let finish_res = finish_res_pre.unwrap_or(Ok(gio_result
+            .downcast::<gio::Task<T::Message>>()
+            .expect("Should can be downcasted")));
+
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
-        imp.initiate_authentication_finish(gio_result, error)
-            .into_glib()
+        imp.initiate_authentication_finish(finish_res).into_glib()
     }
 }
 
 impl<T: ListenerImpl> ListenerImplExt for T {}
 
 pub trait ListenerImpl: ObjectImpl + ObjectSubclass<Type: IsA<Listener>> {
+    type Message: ValueType + Send;
     fn initiate_authentication(
         &self,
         action_id: &str,
@@ -102,13 +110,12 @@ pub trait ListenerImpl: ObjectImpl + ObjectSubclass<Type: IsA<Listener>> {
         cookie: &str,
         identities: Vec<polkit::Identity>,
         cancellable: gio::Cancellable,
-        task: gio::Task<String>,
+        task: gio::Task<Self::Message>,
     );
 
     fn initiate_authentication_finish(
         &self,
-        gio_result: gio::AsyncResult,
-        error: Option<glib::Error>,
+        gio_result: Result<gio::Task<Self::Message>, glib::Error>,
     ) -> bool;
 }
 
