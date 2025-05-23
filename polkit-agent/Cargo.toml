@@ -8,6 +8,7 @@ keywords.workspace = true
 readme.workspace = true
 categories.workspace = true
 repository.workspace = true
+description.workspace = true
 homepage.workspace = true
 
 [dependencies]

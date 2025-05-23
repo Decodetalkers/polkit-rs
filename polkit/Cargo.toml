@@ -9,6 +9,7 @@ readme.workspace = true
 categories.workspace = true
 repository.workspace = true
 homepage.workspace = true
+description.workspace = true
 
 [features]
 v0_101 = ["polkit-rs-sys/v0_101"]
