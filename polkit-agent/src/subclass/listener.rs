@@ -43,12 +43,12 @@ unsafe extern "C" fn initiate_authentication<T: ListenerImpl>(
     action_id: *const c_char,
     message: *const c_char,
     icon_name: *const c_char,
-    details: *mut polkit_sys::PolkitDetails,
+    details: *mut polkit::ffi::PolkitDetails,
     cookie: *const c_char,
     identities: *mut glib::ffi::GList,
-    _cancellable: *mut gio_sys::GCancellable,
-    _callback: gio_sys::GAsyncReadyCallback,
-    _user_data: glib::ffi::gpointer,
+    cancellable: *mut gio::ffi::GCancellable,
+    callback: gio::ffi::GAsyncReadyCallback,
+    user_data: glib::ffi::gpointer,
 ) {
     let instance = unsafe { &*(ptr as *mut T::Instance) };
     let imp = instance.imp();
@@ -59,7 +59,8 @@ unsafe extern "C" fn initiate_authentication<T: ListenerImpl>(
     let details: polkit::Details = unsafe { from_glib_none(details) };
     let cookie = unsafe { GString::from_glib_borrow(cookie) };
     let identities: Vec<polkit::Identity> =
-        unsafe { glist_to_vec::<polkit::Identity, polkit_sys::PolkitIdentity>(identities) };
+        unsafe { glist_to_vec::<polkit::Identity, polkit::ffi::PolkitIdentity>(identities) };
+    let cancelable: gio::Cancellable = unsafe { from_glib_none(cancellable) };
     imp.initilate_authentication(
         action_id.as_str(),
         &message,
@@ -67,11 +68,14 @@ unsafe extern "C" fn initiate_authentication<T: ListenerImpl>(
         &details,
         &cookie,
         &identities,
+        cancelable,
+        callback,
+        user_data,
     );
 }
 unsafe extern "C" fn initiate_authentication_finish<T: ListenerImpl>(
     ptr: *mut ffi::PolkitAgentListener,
-    gio_result: *mut gio_sys::GAsyncResult,
+    gio_result: *mut gio::ffi::GAsyncResult,
     error: *mut *mut glib::ffi::GError,
 ) -> glib::ffi::gboolean {
     unsafe {
@@ -97,6 +101,9 @@ pub trait ListenerImplExt: ListenerImpl {
         _details: &polkit::Details,
         _cookie: &str,
         _identities: &[polkit::Identity],
+        _cancelable: gio::Cancellable,
+        _callback: gio::ffi::GAsyncReadyCallback,
+        _user_data: glib::ffi::gpointer,
     ) {
     }
     fn initiate_authentication_finish(
