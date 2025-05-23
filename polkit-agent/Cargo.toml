@@ -1,11 +1,18 @@
 [package]
-name = "polkit-agent"
+name = "polkit-agent-rs"
 version.workspace = true
 edition.workspace = true
+authors.workspace = true
+license.workspace = true
+keywords.workspace = true
+readme.workspace = true
+categories.workspace = true
+repository.workspace = true
+homepage.workspace = true
 
 [dependencies]
 bitflags.workspace = true
 glib.workspace = true
 gio.workspace = true
-polkit-agent-sys.workspace = true
-polkit.workspace = true
+polkit-agent-rs-sys.workspace = true
+polkit-rs.workspace = true

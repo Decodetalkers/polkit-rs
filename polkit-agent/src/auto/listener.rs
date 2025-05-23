@@ -3,6 +3,7 @@
 // DO NOT EDIT
 
 use crate::ffi;
+use crate::polkit;
 use glib::{prelude::*, translate::*};
 use std::{boxed::Box as Box_, pin::Pin};
 

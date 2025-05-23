@@ -3,6 +3,7 @@
 // DO NOT EDIT
 
 use crate::ffi;
+use crate::polkit;
 use glib::{
     object::ObjectType as _,
     prelude::*,

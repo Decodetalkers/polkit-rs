@@ -337,35 +337,25 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7edddbd0b52d732b21ad9a5fab5c704c14cd949e5e9a1ec5929a24fded1b904c"
 
 [[package]]
-name = "polkit"
+name = "polkit-agent-rs"
 version = "0.1.0"
 dependencies = [
  "bitflags",
  "gio",
  "glib",
- "polkit-sys",
+ "polkit-agent-rs-sys",
+ "polkit-rs",
 ]
 
 [[package]]
-name = "polkit-agent"
-version = "0.1.0"
-dependencies = [
- "bitflags",
- "gio",
- "glib",
- "polkit",
- "polkit-agent-sys",
-]
-
-[[package]]
-name = "polkit-agent-sys"
+name = "polkit-agent-rs-sys"
 version = "0.1.0"
 dependencies = [
  "gio-sys",
  "glib-sys",
  "gobject-sys",
  "libc",
- "polkit-sys",
+ "polkit-rs-sys",
  "shell-words",
  "system-deps",
  "tempfile",
@@ -378,12 +368,22 @@ dependencies = [
  "dialoguer",
  "glib",
  "nix",
- "polkit-agent",
+ "polkit-agent-rs",
  "rpassword",
 ]
 
 [[package]]
-name = "polkit-sys"
+name = "polkit-rs"
+version = "0.1.0"
+dependencies = [
+ "bitflags",
+ "gio",
+ "glib",
+ "polkit-rs-sys",
+]
+
+[[package]]
+name = "polkit-rs-sys"
 version = "0.1.0"
 dependencies = [
  "gio-sys",

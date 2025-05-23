@@ -1,4 +1,4 @@
-use polkit_agent::Listener;
+use polkit_agent_rs::Listener;
 mod imp;
 
 glib::wrapper! {

@@ -1,14 +1,20 @@
 [package]
-name = "polkit"
+name = "polkit-rs"
 version.workspace = true
-authors.workspace = true
 edition.workspace = true
+authors.workspace = true
+license.workspace = true
+keywords.workspace = true
+readme.workspace = true
+categories.workspace = true
+repository.workspace = true
+homepage.workspace = true
 
 [features]
-v0_101 = []
+v0_101 = ["polkit-rs-sys/v0_101"]
 
 [dependencies]
 bitflags.workspace = true
 glib.workspace = true
 gio.workspace = true
-polkit-sys.workspace = true
+polkit-rs-sys.workspace = true

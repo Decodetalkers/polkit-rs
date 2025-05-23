@@ -13,7 +13,7 @@ repository.workspace = true
 documentation.workspace = true
 
 [dependencies]
-polkit-agent.workspace = true
+polkit-agent-rs.workspace = true
 glib.workspace = true
 nix = { workspace = true, features = ["process"] }
 rpassword = "7.4.0"

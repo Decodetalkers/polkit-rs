@@ -11,21 +11,24 @@ resolver = "3"
 [workspace.package]
 version = "0.1.0"
 edition = "2024"
-authors = ["Decodertalkers <aakari@tutanota.com>"]
+authors = [
+	"Decodertalkers <aakari@tutanota.com>",
+	"Val Packett <val@packett.cool>",
+]
 keywords = ["PolicyKit", "PolKit", "libpolkit-gobject"]
 categories = ["api-bindings", "authentication", "os::unix-apis"]
 description = "High-level bindings for libpolkit-gobject-1"
-license = "0BSD OR Unlicense"
-readme = "../README.md"
-homepage = "https://codeberg.org/valpackett/polkit-rs"
-repository = "https://codeberg.org/valpackett/polkit-rs"
-documentation = "https://docs.rs/polkit/"
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/Decodetalkers/polkit-rs"
+repository = "https://github.com/Decodetalkers/polkit-rs"
+documentation = "https://docs.rs/polkit-rs/"
 
 [workspace.dependencies]
-polkit = { version = "0.1.0", path = "./polkit" }
-polkit-sys = { version = "0.1.0", path = "./polkit-sys" }
-polkit-agent-sys = { version = "0.1.0", path = "./polkit-agent-sys" }
-polkit-agent = { version = "0.1.0", path = "./polkit-agent" }
+polkit-rs = { version = "0.1.0", path = "./polkit" }
+polkit-rs-sys = { version = "0.1.0", path = "./polkit-sys" }
+polkit-agent-rs-sys = { version = "0.1.0", path = "./polkit-agent-sys" }
+polkit-agent-rs = { version = "0.1.0", path = "./polkit-agent" }
 bitflags = "2"
 glib = "0.20"
 gio = "0.20"

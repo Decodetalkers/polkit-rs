@@ -14,7 +14,7 @@
 use gio_sys as gio;
 use glib_sys as glib;
 use gobject_sys as gobject;
-use polkit_sys as polkit;
+use polkit_rs_sys as polkit;
 
 #[allow(unused_imports)]
 use libc::{FILE, intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t};

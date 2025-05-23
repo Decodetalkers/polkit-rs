@@ -9,7 +9,7 @@ use glib::{
     signal::{SignalHandlerId, connect_raw},
     translate::*,
 };
-use polkit_sys::polkit_unix_process_set_gids;
+use crate::ffi::polkit_unix_process_set_gids;
 use std::{boxed::Box as Box_, slice};
 
 glib::wrapper! {

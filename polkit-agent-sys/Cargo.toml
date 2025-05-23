@@ -1,7 +1,14 @@
 [package]
-name = "polkit-agent-sys"
+name = "polkit-agent-rs-sys"
 version.workspace = true
 edition.workspace = true
+authors.workspace = true
+license.workspace = true
+keywords.workspace = true
+readme.workspace = true
+categories.workspace = true
+repository.workspace = true
+homepage.workspace = true
 build = "build.rs"
 
 [package.metadata.system-deps.polkit_agent_1]
@@ -14,13 +21,13 @@ rustdoc-args = ["--cfg", "docsrs", "--generate-link-to-definition"]
 all-features = true
 
 [lib]
-name = "polkit_agent_sys"
+name = "polkit_agent_rs_sys"
 
 [dependencies]
 libc.workspace = true
 glib-sys.workspace = true
 gobject-sys.workspace = true
-polkit-sys.workspace = true
+polkit-rs-sys.workspace = true
 gio-sys.workspace = true
 
 [build-dependencies]

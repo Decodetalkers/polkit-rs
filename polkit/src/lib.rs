@@ -1,4 +1,4 @@
-pub use polkit_sys as ffi;
+pub use polkit_rs_sys as ffi;
 
 #[allow(unused_imports)]
 #[allow(non_snake_case)]

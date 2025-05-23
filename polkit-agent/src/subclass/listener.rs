@@ -1,5 +1,6 @@
 use std::ffi::c_char;
 
+use crate::polkit;
 use crate::Listener;
 use crate::ffi;
 use gio::ffi::g_task_new;

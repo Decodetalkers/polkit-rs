@@ -2,13 +2,12 @@ use dialoguer::FuzzySelect;
 use dialoguer::theme::ColorfulTheme;
 use glib::object::Cast;
 use glib::subclass::prelude::*;
-use polkit_agent::gio::prelude::CancellableExt;
-use polkit_agent::subclass::ListenerImpl;
-
-use polkit_agent::Session as AgentSession;
-use polkit_agent::gio;
-use polkit_agent::polkit;
-use polkit_agent::polkit::UnixUser;
+use polkit_agent_rs::Session as AgentSession;
+use polkit_agent_rs::gio;
+use polkit_agent_rs::gio::prelude::CancellableExt;
+use polkit_agent_rs::polkit;
+use polkit_agent_rs::polkit::UnixUser;
+use polkit_agent_rs::subclass::ListenerImpl;
 use rpassword::prompt_password;
 
 fn choose_user(users: &[UnixUser]) -> Option<(String, usize)> {

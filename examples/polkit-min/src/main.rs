@@ -1,7 +1,7 @@
-use polkit_agent::RegisterFlags;
-use polkit_agent::gio;
-use polkit_agent::polkit::UnixSession;
-use polkit_agent::traits::ListenerExt;
+use polkit_agent_rs::RegisterFlags;
+use polkit_agent_rs::gio;
+use polkit_agent_rs::polkit::UnixSession;
+use polkit_agent_rs::traits::ListenerExt;
 mod mypolkit;
 use mypolkit::MyPolkit;
 const OBJECT_PATH: &str = "/org/waycrate/PolicyKit1/AuthenticationAgent";

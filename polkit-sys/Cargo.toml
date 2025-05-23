@@ -1,7 +1,14 @@
 [package]
-name = "polkit-sys"
-version = "0.1.0"
-edition = "2024"
+name = "polkit-rs-sys"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+keywords.workspace = true
+readme.workspace = true
+categories.workspace = true
+repository.workspace = true
+homepage.workspace = true
 build = "build.rs"
 
 [package.metadata.system-deps.polkit_gobject_1]
