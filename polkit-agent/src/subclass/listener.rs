@@ -80,7 +80,7 @@ unsafe extern "C" fn initiate_authentication_finish<T: ListenerImpl>(
 ) -> glib::ffi::gboolean {
     unsafe {
         let gio_result: gio::AsyncResult = from_glib_none(gio_result);
-        let error: glib::Error = from_glib_none(*error);
+        let error: Option<glib::Error> = from_glib_none(*error);
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
         imp.initiate_authentication_finish(gio_result, error)
@@ -107,7 +107,7 @@ pub trait ListenerImpl: ObjectImpl + ObjectSubclass<Type: IsA<Listener>> {
     fn initiate_authentication_finish(
         &self,
         _gio_result: gio::AsyncResult,
-        _error: glib::Error,
+        _error: Option<glib::Error>,
     ) -> bool {
         false
     }
