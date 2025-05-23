@@ -2,6 +2,7 @@ use std::ffi::c_char;
 
 use crate::Listener;
 use crate::ffi;
+use gio::ffi::g_task_new;
 use glib::GString;
 use glib::translate::FromGlibPtrBorrow;
 use glib::translate::FromGlibPtrNone;
@@ -50,6 +51,8 @@ unsafe extern "C" fn initiate_authentication<T: ListenerImpl>(
     callback: gio::ffi::GAsyncReadyCallback,
     user_data: glib::ffi::gpointer,
 ) {
+    let task = unsafe { g_task_new(ptr as *mut _, cancellable, callback, user_data) };
+    let task: gio::Task<String> = unsafe { from_glib_none(task) };
     let instance = unsafe { &*(ptr as *mut T::Instance) };
     let imp = instance.imp();
 
@@ -60,17 +63,16 @@ unsafe extern "C" fn initiate_authentication<T: ListenerImpl>(
     let cookie = unsafe { GString::from_glib_borrow(cookie) };
     let identities: Vec<polkit::Identity> =
         unsafe { glist_to_vec::<polkit::Identity, polkit::ffi::PolkitIdentity>(identities) };
-    let cancelable: gio::Cancellable = unsafe { from_glib_none(cancellable) };
-    imp.initilate_authentication(
+    let cancellable: gio::Cancellable = unsafe { from_glib_none(cancellable) };
+    imp.initiate_authentication(
         action_id.as_str(),
         &message,
         &icon_name,
         &details,
         &cookie,
-        &identities,
-        cancelable,
-        callback,
-        user_data,
+        identities,
+        cancellable,
+        task,
     );
 }
 unsafe extern "C" fn initiate_authentication_finish<T: ListenerImpl>(
@@ -91,17 +93,16 @@ unsafe extern "C" fn initiate_authentication_finish<T: ListenerImpl>(
 impl<T: ListenerImpl> ListenerImplExt for T {}
 
 pub trait ListenerImpl: ObjectImpl + ObjectSubclass<Type: IsA<Listener>> {
-    fn initilate_authentication(
+    fn initiate_authentication(
         &self,
         action_id: &str,
         message: &str,
         icon_name: &str,
         details: &polkit::Details,
         cookie: &str,
-        identities: &[polkit::Identity],
-        cancelable: gio::Cancellable,
-        callback: gio::ffi::GAsyncReadyCallback,
-        user_data: glib::ffi::gpointer,
+        identities: Vec<polkit::Identity>,
+        cancellable: gio::Cancellable,
+        task: gio::Task<String>,
     );
 
     fn initiate_authentication_finish(

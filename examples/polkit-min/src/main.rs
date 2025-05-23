@@ -3,6 +3,7 @@ use polkit_agent::RegisterFlags;
 use polkit_agent::gio;
 use polkit_agent::polkit::UnixSession;
 use polkit_agent::traits::ListenerExt;
+
 glib::wrapper! {
      pub struct MyPolkit(ObjectSubclass<imp::MyPolkit>)
          @extends Listener;
@@ -15,35 +16,99 @@ impl Default for MyPolkit {
 }
 
 mod imp {
+    use dialoguer::FuzzySelect;
+    use dialoguer::theme::ColorfulTheme;
+    use glib::object::Cast;
     use glib::subclass::prelude::*;
+    use polkit_agent::gio::prelude::CancellableExt;
     use polkit_agent::subclass::ListenerImpl;
 
+    use polkit_agent::Session as AgentSession;
     use polkit_agent::gio;
     use polkit_agent::polkit;
+    use polkit_agent::polkit::UnixUser;
+    use rpassword::prompt_password;
+
+    fn choose_user(users: &[UnixUser]) -> Option<(String, usize)> {
+        let names: Vec<String> = users
+            .iter()
+            .map(|user| user.name().unwrap().to_string())
+            .collect();
+        let index = FuzzySelect::with_theme(&ColorfulTheme::default())
+            .with_prompt("Which user?")
+            .default(0)
+            .items(&names)
+            .interact()
+            .ok()?;
+        Some((names[index].clone(), index))
+    }
+
     #[derive(Default)]
     pub struct MyPolkit;
 
     impl ListenerImpl for MyPolkit {
-        fn initilate_authentication(
+        fn initiate_authentication(
             &self,
             _action_id: &str,
             _message: &str,
             _icon_name: &str,
             _details: &polkit::Details,
-            _cookie: &str,
-            identities: &[polkit::Identity],
-            _cancelable: gio::Cancellable,
-            _callback: gio::ffi::GAsyncReadyCallback,
-            _user_data: glib::ffi::gpointer,
+            cookie: &str,
+            identities: Vec<polkit::Identity>,
+            cancelable: gio::Cancellable,
+            task: gio::Task<String>,
         ) {
-            println!("{_cookie}");
-            for identity in identities {}
+            let sub_loop = glib::MainLoop::new(None, true);
+            let users: Vec<UnixUser> = identities
+                .into_iter()
+                .map(|idenifier| idenifier.dynamic_cast())
+                .flatten()
+                .collect();
+            let Some((name, index)) = choose_user(&users) else {
+                cancelable.cancel();
+                return;
+            };
+            let session = AgentSession::new(&users[index], cookie);
+
+            let sub_loop2 = sub_loop.clone();
+            session.connect_completed(move |session, success| {
+                if success {
+                    if success {
+                        println!("succeeded");
+                    }
+                    session.cancel();
+                    unsafe {
+                        task.clone().return_result(Ok("success".to_string()));
+                    }
+                    sub_loop2.quit();
+                }
+            });
+            session.connect_show_info(|_session, info| {
+                println!("info: {info}");
+            });
+            session.connect_show_error(|_session, error| {
+                eprintln!("error: {error}");
+            });
+            session.connect_request(move |session, request, _echo_on| {
+                if !request.starts_with("Password:") {
+                    return;
+                }
+                let Ok(password) = prompt_password(format!("{name} password: ")) else {
+                    session.cancel();
+                    cancelable.cancel();
+                    return;
+                };
+                session.response(&password);
+            });
+            session.initiate();
+            sub_loop.run();
         }
         fn initiate_authentication_finish(
             &self,
-            _gio_result: gio::AsyncResult,
+            gio_result: gio::AsyncResult,
             _error: Option<glib::Error>,
         ) -> bool {
+            println!("finally!");
             true
         }
     }

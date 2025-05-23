@@ -16,3 +16,5 @@ documentation.workspace = true
 polkit-agent.workspace = true
 glib.workspace = true
 nix = { workspace = true, features = ["process"] }
+rpassword = "7.4.0"
+dialoguer = { version = "0.11.0", features = ["fuzzy-select"] }
