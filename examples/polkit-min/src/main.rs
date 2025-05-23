@@ -23,21 +23,25 @@ mod imp {
     #[derive(Default)]
     pub struct MyPolkit;
 
+    impl ListenerImpl for MyPolkit {}
     #[glib::object_subclass]
     impl ObjectSubclass for MyPolkit {
         const NAME: &'static str = "MyPolkit";
         type Type = super::MyPolkit;
         type ParentType = super::Listener;
 
-        fn class_init(klass: &mut Self::Class) {}
+        fn class_init(klass: &mut Self::Class) {
+            let klass = klass.as_mut();
+        }
     }
 
     impl ObjectImpl for MyPolkit {
-        fn constructed(&self) {}
+        fn constructed(&self) {
+            self.parent_constructed();
+            let obj = self.obj();
+        }
         fn dispose(&self) {}
     }
-
-    impl ListenerImpl for MyPolkit {}
 }
 
 fn main() {

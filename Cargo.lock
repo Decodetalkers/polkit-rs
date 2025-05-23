@@ -292,9 +292,11 @@ version = "0.1.0"
 dependencies = [
  "bitflags",
  "gio",
+ "gio-sys",
  "glib",
  "polkit",
  "polkit-agent-sys",
+ "polkit-sys",
 ]
 
 [[package]]

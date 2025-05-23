@@ -7,5 +7,7 @@ edition.workspace = true
 bitflags.workspace = true
 glib.workspace = true
 gio.workspace = true
+gio-sys.workspace = true
+polkit-sys.workspace = true
 polkit-agent-sys.workspace = true
 polkit.workspace = true
