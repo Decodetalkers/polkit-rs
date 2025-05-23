@@ -15,3 +15,4 @@ documentation.workspace = true
 [dependencies]
 polkit-agent.workspace = true
 glib.workspace = true
+nix = { workspace = true, features = ["process"] }

@@ -93,24 +93,22 @@ impl<T: ListenerImpl> ListenerImplExt for T {}
 pub trait ListenerImpl: ObjectImpl + ObjectSubclass<Type: IsA<Listener>> {
     fn initilate_authentication(
         &self,
-        _action_id: &str,
-        _message: &str,
-        _icon_name: &str,
-        _details: &polkit::Details,
-        _cookie: &str,
-        _identities: &[polkit::Identity],
-        _cancelable: gio::Cancellable,
-        _callback: gio::ffi::GAsyncReadyCallback,
-        _user_data: glib::ffi::gpointer,
-    ) {
-    }
+        action_id: &str,
+        message: &str,
+        icon_name: &str,
+        details: &polkit::Details,
+        cookie: &str,
+        identities: &[polkit::Identity],
+        cancelable: gio::Cancellable,
+        callback: gio::ffi::GAsyncReadyCallback,
+        user_data: glib::ffi::gpointer,
+    );
+
     fn initiate_authentication_finish(
         &self,
-        _gio_result: gio::AsyncResult,
-        _error: Option<glib::Error>,
-    ) -> bool {
-        false
-    }
+        gio_result: gio::AsyncResult,
+        error: Option<glib::Error>,
+    ) -> bool;
 }
 
 pub trait ListenerImplExt: ListenerImpl {}
