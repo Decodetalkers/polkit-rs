@@ -1,8 +1,8 @@
 use std::ffi::c_char;
 
-use crate::polkit;
 use crate::Listener;
 use crate::ffi;
+use crate::polkit;
 use gio::ffi::g_task_new;
 use glib::GString;
 use glib::object::Cast;
@@ -87,7 +87,7 @@ unsafe extern "C" fn initiate_authentication_finish<T: ListenerImpl>(
     unsafe {
         let gio_result: gio::AsyncResult = from_glib_none(gio_result);
         let error: Option<glib::Error> = from_glib_none(*error);
-        let finish_res_pre = error.map(|err| Err(err));
+        let finish_res_pre = error.map(Err);
         let finish_res = finish_res_pre.unwrap_or(Ok(gio_result
             .downcast::<gio::Task<T::Message>>()
             .expect("Should can be downcasted")));
@@ -102,6 +102,7 @@ impl<T: ListenerImpl> ListenerImplExt for T {}
 
 pub trait ListenerImpl: ObjectImpl + ObjectSubclass<Type: IsA<Listener>> {
     type Message: ValueType + Send;
+    #[allow(clippy::too_many_arguments)]
     fn initiate_authentication(
         &self,
         action_id: &str,

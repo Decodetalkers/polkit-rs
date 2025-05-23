@@ -179,7 +179,7 @@ impl ImplicitAuthorization {
 impl std::fmt::Display for ImplicitAuthorization {
     #[inline]
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        f.write_str(&self.to_str())
+        f.write_str(self.to_str())
     }
 }
 

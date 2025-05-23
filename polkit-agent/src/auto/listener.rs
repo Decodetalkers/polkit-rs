@@ -43,6 +43,7 @@ impl Listener {
 }
 
 pub trait ListenerExt: IsA<Listener> + 'static {
+    #[allow(clippy::too_many_arguments)]
     #[doc(alias = "polkit_agent_listener_initiate_authentication")]
     fn initiate_authentication<P: FnOnce(Result<(), glib::Error>) + 'static>(
         &self,

@@ -43,8 +43,10 @@ impl UnixSession {
     }
 
     #[doc(alias = "polkit_unix_session_new")]
-    pub fn new(session_id: &str) -> Subject {
-        unsafe { from_glib_full(ffi::polkit_unix_session_new(session_id.to_glib_none().0)) }
+    pub fn new(session_id: &str) -> Self {
+        let subject: Subject =
+            unsafe { from_glib_full(ffi::polkit_unix_session_new(session_id.to_glib_none().0)) };
+        subject.dynamic_cast().expect("it should always work")
     }
 
     #[doc(alias = "polkit_unix_session_new_for_process")]

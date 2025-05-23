@@ -41,8 +41,9 @@ impl UnixUser {
     }
 
     #[doc(alias = "polkit_unix_user_new")]
-    pub fn new(uid: i32) -> Identity {
-        unsafe { from_glib_full(ffi::polkit_unix_user_new(uid)) }
+    pub fn new(uid: i32) -> Self {
+        let identify: Identity = unsafe { from_glib_full(ffi::polkit_unix_user_new(uid)) };
+        identify.dynamic_cast().expect("it should always work")
     }
 
     #[doc(alias = "polkit_unix_user_new_for_name")]

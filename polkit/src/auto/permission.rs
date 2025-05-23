@@ -51,6 +51,7 @@ impl Permission {
         unsafe { from_glib_none(ffi::polkit_permission_get_subject(self.to_glib_none().0)) }
     }
 
+    #[allow(clippy::new_ret_no_self)]
     #[doc(alias = "polkit_permission_new")]
     pub fn new<P: FnOnce(Result<gio::Permission, glib::Error>) + 'static>(
         action_id: &str,

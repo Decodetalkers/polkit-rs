@@ -76,9 +76,12 @@ impl SystemBusName {
         }
     }
 
+    #[allow(clippy::new_ret_no_self)]
     #[doc(alias = "polkit_system_bus_name_new")]
-    pub fn new(name: &str) -> Subject {
-        unsafe { from_glib_full(ffi::polkit_system_bus_name_new(name.to_glib_none().0)) }
+    pub fn new(name: &str) -> Self {
+        let subject: Subject =
+            unsafe { from_glib_full(ffi::polkit_system_bus_name_new(name.to_glib_none().0)) };
+        subject.dynamic_cast().expect("it should always work")
     }
 
     #[doc(alias = "name")]

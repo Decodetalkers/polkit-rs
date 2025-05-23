@@ -43,8 +43,7 @@ impl ListenerImpl for MyPolkit {
         let sub_loop = glib::MainLoop::new(None, true);
         let users: Vec<UnixUser> = identities
             .into_iter()
-            .map(|idenifier| idenifier.dynamic_cast())
-            .flatten()
+            .flat_map(|idenifier| idenifier.dynamic_cast())
             .collect();
         let Some((name, index)) = choose_user(&users) else {
             cancellable.cancel();

@@ -2,9 +2,9 @@
 // from ../misc (@ ???)
 // DO NOT EDIT
 
+use crate::polkit;
 use crate::{Listener, ffi};
 use glib::{prelude::*, translate::*};
-use crate::polkit;
 
 #[doc(alias = "polkit_agent_register_listener")]
 pub fn register_listener(

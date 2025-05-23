@@ -35,8 +35,10 @@ impl UnixNetgroup {
     }
 
     #[doc(alias = "polkit_unix_netgroup_new")]
-    pub fn new(name: &str) -> Identity {
-        unsafe { from_glib_full(ffi::polkit_unix_netgroup_new(name.to_glib_none().0)) }
+    pub fn new(name: &str) -> Self {
+        let identify: Identity =
+            unsafe { from_glib_full(ffi::polkit_unix_netgroup_new(name.to_glib_none().0)) };
+        identify.dynamic_cast().expect("it should always work")
     }
 
     #[doc(alias = "name")]

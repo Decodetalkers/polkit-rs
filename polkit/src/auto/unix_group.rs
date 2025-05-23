@@ -34,9 +34,11 @@ impl UnixGroup {
         }
     }
 
+    #[allow(clippy::new_ret_no_self)]
     #[doc(alias = "polkit_unix_group_new")]
-    pub fn new(gid: i32) -> Identity {
-        unsafe { from_glib_full(ffi::polkit_unix_group_new(gid)) }
+    pub fn new(gid: i32) -> Self {
+        let identify: Identity = unsafe { from_glib_full(ffi::polkit_unix_group_new(gid)) };
+        identify.dynamic_cast().expect("It should always work")
     }
 
     #[doc(alias = "polkit_unix_group_new_for_name")]

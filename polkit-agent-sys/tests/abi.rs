@@ -4,7 +4,7 @@
 
 #![cfg(unix)]
 
-use polkit_agent_sys::*;
+use polkit_agent_rs_sys::*;
 use std::env;
 use std::error::Error;
 use std::ffi::OsString;
