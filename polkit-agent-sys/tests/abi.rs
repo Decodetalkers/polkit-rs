@@ -25,6 +25,8 @@ impl Compiler {
     pub fn new() -> Result<Self, Box<dyn Error>> {
         let mut args = get_var("CC", "cc")?;
         args.push("-Wno-deprecated-declarations".to_owned());
+        // For PolkitAgent
+        args.push("-DPOLKIT_AGENT_I_KNOW_API_IS_SUBJECT_TO_CHANGE".to_owned());
         // For _Generic
         args.push("-std=c11".to_owned());
         // For %z support in printf when using MinGW.
