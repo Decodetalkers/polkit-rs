@@ -9,7 +9,7 @@ members = [
 
 resolver = "3"
 [workspace.package]
-version = "0.1.2"
+version = "0.1.3"
 edition = "2024"
 authors = [
 	"Decodertalkers <aakari@tutanota.com>",
@@ -25,10 +25,10 @@ repository = "https://github.com/Decodetalkers/polkit-rs"
 
 
 [workspace.dependencies]
-polkit-rs = { version = "0.1.1", path = "./polkit" }
-polkit-rs-sys = { version = "0.1.1", path = "./polkit-sys" }
-polkit-agent-rs-sys = { version = "0.1.1", path = "./polkit-agent-sys" }
-polkit-agent-rs = { version = "0.1.1", path = "./polkit-agent" }
+polkit-rs = { version = "0.1.3", path = "./polkit" }
+polkit-rs-sys = { version = "0.1.3", path = "./polkit-sys" }
+polkit-agent-rs-sys = { version = "0.1.3", path = "./polkit-agent-sys" }
+polkit-agent-rs = { version = "0.1.3", path = "./polkit-agent" }
 bitflags = "2"
 glib = "0.20"
 gio = "0.20"

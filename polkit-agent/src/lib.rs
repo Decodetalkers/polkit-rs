@@ -1,3 +1,4 @@
+#![cfg_attr(docsrs, feature(doc_cfg))]
 use polkit_agent_rs_sys as ffi;
 mod auto;
 pub use auto::*;
