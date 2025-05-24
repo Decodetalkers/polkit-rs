@@ -21,7 +21,7 @@ impl Permission {
         action_id: &str,
         subject: Option<&impl IsA<Subject>>,
         cancellable: Option<&impl IsA<gio::Cancellable>>,
-    ) -> Result<Permission, glib::Error> {
+    ) -> Result<Self, glib::Error> {
         unsafe {
             let mut error = std::ptr::null_mut();
             let ret = ffi::polkit_permission_new_sync(
@@ -53,7 +53,7 @@ impl Permission {
 
     #[allow(clippy::new_ret_no_self)]
     #[doc(alias = "polkit_permission_new")]
-    pub fn new<P: FnOnce(Result<gio::Permission, glib::Error>) + 'static>(
+    pub fn new_with_callback<P: FnOnce(Result<Self, glib::Error>) + 'static>(
         action_id: &str,
         subject: Option<&impl IsA<Subject>>,
         cancellable: Option<&impl IsA<gio::Cancellable>>,
@@ -72,7 +72,7 @@ impl Permission {
         let user_data: Box_<glib::thread_guard::ThreadGuard<P>> =
             Box_::new(glib::thread_guard::ThreadGuard::new(callback));
         unsafe extern "C" fn new_trampoline<
-            P: FnOnce(Result<gio::Permission, glib::Error>) + 'static,
+            P: FnOnce(Result<Permission, glib::Error>) + 'static,
         >(
             _source_object: *mut glib::gobject_ffi::GObject,
             res: *mut gio::ffi::GAsyncResult,
@@ -82,7 +82,8 @@ impl Permission {
                 let mut error = std::ptr::null_mut();
                 let ret = ffi::polkit_permission_new_finish(res, &mut error);
                 let result = if error.is_null() {
-                    Ok(from_glib_full(ret))
+                    let permission: gio::Permission = from_glib_full(ret);
+                    Ok(permission.unsafe_cast())
                 } else {
                     Err(from_glib_full(error))
                 };
@@ -107,12 +108,11 @@ impl Permission {
     pub fn new_future(
         action_id: &str,
         subject: Option<&(impl IsA<Subject> + Clone + 'static)>,
-    ) -> Pin<Box_<dyn std::future::Future<Output = Result<gio::Permission, glib::Error>> + 'static>>
-    {
+    ) -> Pin<Box_<dyn std::future::Future<Output = Result<Self, glib::Error>> + 'static>> {
         let action_id = String::from(action_id);
         let subject = subject.map(ToOwned::to_owned);
         Box_::pin(gio::GioFuture::new(&(), move |_obj, cancellable, send| {
-            Self::new(
+            Self::new_with_callback(
                 &action_id,
                 subject.as_ref().map(::std::borrow::Borrow::borrow),
                 Some(cancellable),
