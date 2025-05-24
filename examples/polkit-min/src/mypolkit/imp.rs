@@ -1,6 +1,5 @@
 use dialoguer::FuzzySelect;
 use dialoguer::theme::ColorfulTheme;
-use glib::MainLoop;
 use glib::object::Cast;
 use glib::subclass::prelude::*;
 use polkit_agent_rs::Session as AgentSession;
@@ -35,18 +34,18 @@ fn start_session(
     name: String,
     cancellable: gio::Cancellable,
     task: gio::Task<String>,
-    sub_loop: MainLoop,
     cookie: String,
     count: Arc<AtomicU8>,
 ) {
+    let sub_loop = glib::MainLoop::new(None, true);
     let name2 = name.clone();
     let cancellable2 = cancellable.clone();
 
+    let sub_loop_2 = sub_loop.clone();
     session.connect_completed(move |session, success| {
         let name2 = name2.clone();
         let cancellable2 = cancellable2.clone();
         let task = task.clone();
-        let sub_loop2 = sub_loop.clone();
         let cookie = cookie.clone();
         let count = count.clone();
         if !success {
@@ -57,20 +56,12 @@ fn start_session(
                 }
                 session.cancel();
 
-                sub_loop.quit();
+                sub_loop_2.quit();
                 return;
             }
             let user: UnixUser = UnixUser::new_for_name(&name2).unwrap();
             let session = AgentSession::new(&user, &cookie);
-            start_session(
-                &session,
-                name2,
-                cancellable2,
-                task,
-                sub_loop2,
-                cookie,
-                count,
-            );
+            start_session(&session, name2, cancellable2, task, cookie, count);
         } else {
             unsafe {
                 task.return_result(Ok("success".to_string()));
@@ -78,7 +69,7 @@ fn start_session(
         }
         session.cancel();
 
-        sub_loop.quit();
+        sub_loop_2.quit();
     });
     session.connect_show_info(|_session, info| {
         println!("info: {info}");
@@ -98,7 +89,7 @@ fn start_session(
         session.response(&password);
     });
     session.initiate();
-    println!("ggg");
+    sub_loop.run();
 }
 
 impl ListenerImpl for MyPolkit {
@@ -114,7 +105,6 @@ impl ListenerImpl for MyPolkit {
         cancellable: gio::Cancellable,
         task: gio::Task<Self::Message>,
     ) {
-        let sub_loop = glib::MainLoop::new(None, true);
         let users: Vec<UnixUser> = identities
             .into_iter()
             .flat_map(|idenifier| idenifier.dynamic_cast())
@@ -125,18 +115,8 @@ impl ListenerImpl for MyPolkit {
         };
         let session = AgentSession::new(&users[index], cookie);
 
-        let sub_loop2 = sub_loop.clone();
         let count = Arc::new(AtomicU8::new(0));
-        start_session(
-            &session,
-            name,
-            cancellable,
-            task,
-            sub_loop2,
-            cookie.to_string(),
-            count,
-        );
-        sub_loop.run();
+        start_session(&session, name, cancellable, task, cookie.to_string(), count);
     }
     fn initiate_authentication_finish(
         &self,
