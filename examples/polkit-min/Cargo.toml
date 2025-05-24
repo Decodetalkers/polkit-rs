@@ -10,7 +10,6 @@ license.workspace = true
 readme.workspace = true
 homepage.workspace = true
 repository.workspace = true
-documentation.workspace = true
 
 [dependencies]
 polkit-agent-rs.workspace = true

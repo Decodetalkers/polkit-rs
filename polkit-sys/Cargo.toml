@@ -10,6 +10,7 @@ categories.workspace = true
 repository.workspace = true
 homepage.workspace = true
 description.workspace = true
+documentation = "https://docs.rs/polkit-rs-sys/"
 build = "build.rs"
 
 [package.metadata.system-deps.polkit_gobject_1]

@@ -10,6 +10,7 @@ categories.workspace = true
 repository.workspace = true
 homepage.workspace = true
 description.workspace = true
+documentation = "https://docs.rs/polkit-rs/"
 
 [features]
 v0_101 = ["polkit-rs-sys/v0_101"]

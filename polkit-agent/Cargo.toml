@@ -10,6 +10,7 @@ categories.workspace = true
 repository.workspace = true
 description.workspace = true
 homepage.workspace = true
+documentation = "https://docs.rs/polkit-agent-rs/"
 
 [dependencies]
 bitflags.workspace = true
