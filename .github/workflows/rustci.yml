@@ -1,0 +1,60 @@
+name: Build
+
+on:
+    push:
+        branches:
+            - master
+        tags:
+            - v*
+    pull_request:
+        branches:
+            - master
+concurrency:
+    group: ${{ github.ref }}
+    cancel-in-progress: true
+jobs:
+    build:
+        name: Build Binary
+        runs-on: ubuntu-latest
+        container:
+          image: archlinux:latest
+        steps:
+            - name: Install Deps
+              run: pacman -Syu --noconfirm base-devel clang polkit
+            - uses: actions/checkout@v4
+            - uses: dtolnay/rust-toolchain@stable
+              with:
+                components: clippy rustfmt
+            - name: Run fmt check
+              run: cargo fmt --all -- --check
+            - name: Run clippy check
+              run: cargo clippy -- -D warnings
+            - name: Run tests
+              run: cargo test --verbose
+
+    release:
+        permissions:
+            contents: write
+        if: startsWith(github.ref, 'refs/tags/v')
+        needs:
+            - build
+        runs-on: ubuntu-latest
+        container:
+          image: archlinux:latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Install Deps
+              run: pacman -Syu --noconfirm base-devel clang polkit
+            - uses: actions/checkout@v4
+            - uses: dtolnay/rust-toolchain@stable
+              with:
+                components: clippy rustfmt
+            - name: Publish to crate
+              run: |
+                cargo publish -p polkit-rs-sys --token ${{ secrets.CRATES_TOKEN }}
+                cargo publish -p polkit-rs --token ${{ secrets.CRATES_TOKEN }}
+                cargo publish -p polkit-agent-rs-sys --token ${{ secrets.CRATES_TOKEN }}
+                cargo publish -p polkit-agent-rs --token ${{ secrets.CRATES_TOKEN }}
+            - uses: softprops/action-gh-release@v2
+              with:
+                draft: true

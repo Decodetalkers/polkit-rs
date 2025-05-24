@@ -1,6 +1,5 @@
 [files]
-extend-exclude = ["**/*.cmake", "**/*.json", "assets_for_test/*"]
+extend-exclude = ["**/*.gir"]
 
 [default.extend-words]
-typ = "typ"
 gir = "gir"
