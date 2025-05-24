@@ -137,13 +137,6 @@ impl ObjectSubclass for MyPolkit {
     const NAME: &'static str = "MyPolkit";
     type Type = super::MyPolkit;
     type ParentType = super::Listener;
-
-    fn class_init(_klass: &mut Self::Class) {}
 }
 
-impl ObjectImpl for MyPolkit {
-    fn constructed(&self) {
-        self.parent_constructed();
-    }
-    fn dispose(&self) {}
-}
+impl ObjectImpl for MyPolkit {}
