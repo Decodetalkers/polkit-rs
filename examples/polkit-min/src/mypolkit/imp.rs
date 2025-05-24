@@ -1,5 +1,6 @@
 use dialoguer::FuzzySelect;
 use dialoguer::theme::ColorfulTheme;
+use glib::error::ErrorDomain;
 use glib::object::Cast;
 use glib::subclass::prelude::*;
 use polkit_agent_rs::Session as AgentSession;
@@ -29,6 +30,27 @@ pub struct MyPolkit;
 use std::sync::Arc;
 use std::sync::atomic::AtomicU8;
 
+#[derive(Debug, Clone, Copy)]
+struct SessionError;
+
+impl ErrorDomain for SessionError {
+    fn domain() -> glib::Quark {
+        glib::Quark::from_str("session_error")
+    }
+    fn code(self) -> i32 {
+        -1
+    }
+    fn from(code: i32) -> Option<Self>
+    where
+        Self: Sized,
+    {
+        if code == -1 {
+            return Some(Self);
+        }
+        None
+    }
+}
+
 fn start_session(
     session: &AgentSession,
     name: String,
@@ -52,7 +74,10 @@ fn start_session(
             count.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
             if count.load(std::sync::atomic::Ordering::Relaxed) >= 3 {
                 unsafe {
-                    task.return_result(Ok("Failed".to_string()));
+                    task.return_result(Err(glib::Error::new(
+                        SessionError,
+                        "You have used all attempts",
+                    )));
                 }
                 session.cancel();
 
