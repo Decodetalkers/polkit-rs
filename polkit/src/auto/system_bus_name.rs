@@ -76,7 +76,6 @@ impl SystemBusName {
         }
     }
 
-    #[allow(clippy::new_ret_no_self)]
     #[doc(alias = "polkit_system_bus_name_new")]
     pub fn new(name: &str) -> Self {
         let subject: Subject =

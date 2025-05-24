@@ -42,17 +42,21 @@ impl UnixUser {
 
     #[doc(alias = "polkit_unix_user_new")]
     pub fn new(uid: i32) -> Self {
-        let identify: Identity = unsafe { from_glib_full(ffi::polkit_unix_user_new(uid)) };
-        identify.dynamic_cast().expect("it should always work")
+        unsafe {
+            let identify: Identity = from_glib_full(ffi::polkit_unix_user_new(uid));
+            identify.unsafe_cast()
+        }
     }
 
     #[doc(alias = "polkit_unix_user_new_for_name")]
-    pub fn new_for_name(name: &str) -> Result<Option<Identity>, glib::Error> {
+    pub fn new_for_name(name: &str) -> Result<Self, glib::Error> {
         unsafe {
             let mut error = std::ptr::null_mut();
             let ret = ffi::polkit_unix_user_new_for_name(name.to_glib_none().0, &mut error);
             if error.is_null() {
-                Ok(from_glib_full(ret))
+                let identify: Identity = from_glib_full(ret);
+                let user = identify.unsafe_cast();
+                Ok(user)
             } else {
                 Err(from_glib_full(error))
             }
