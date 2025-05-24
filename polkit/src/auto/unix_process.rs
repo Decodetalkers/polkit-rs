@@ -128,33 +128,41 @@ impl UnixProcess {
 
     #[doc(alias = "polkit_unix_process_new")]
     pub fn new(pid: i32) -> Self {
-        let subject: Subject = unsafe { from_glib_full(ffi::polkit_unix_process_new(pid)) };
-        subject.dynamic_cast().expect("it should always work")
+        unsafe {
+            let subject: Subject = from_glib_full(ffi::polkit_unix_process_new(pid));
+            subject.unsafe_cast()
+        }
     }
 
     #[doc(alias = "polkit_unix_process_new_for_owner")]
     pub fn new_for_owner(pid: i32, start_time: u64, uid: i32) -> Self {
-        let subject: Subject =
-            unsafe { from_glib_full(ffi::polkit_unix_process_new_for_owner(pid, start_time, uid)) };
-        subject.dynamic_cast().expect("it should always work")
+        unsafe {
+            let subject: Subject =
+                from_glib_full(ffi::polkit_unix_process_new_for_owner(pid, start_time, uid));
+            subject.unsafe_cast()
+        }
     }
 
     #[doc(alias = "polkit_unix_process_new_full")]
     pub fn new_full(pid: i32, start_time: u64) -> Self {
-        let subject: Subject =
-            unsafe { from_glib_full(ffi::polkit_unix_process_new_full(pid, start_time)) };
-        subject.dynamic_cast().expect("it should always work")
+        unsafe {
+            let subject: Subject =
+                from_glib_full(ffi::polkit_unix_process_new_full(pid, start_time));
+            subject.unsafe_cast()
+        }
     }
 
     #[doc(alias = "polkit_unix_process_new_pidfd")]
     pub fn new_pidfd(pidfd: i32, uid: i32, gids: Vec<usize>) -> Self {
-        let subject: Subject = unsafe {
-            let new_gids = g_array_new(0, 0, std::mem::size_of::<usize>() as u32);
+        unsafe {
+            let subject: Subject = {
+                let new_gids = g_array_new(0, 0, std::mem::size_of::<usize>() as u32);
 
-            g_array_append_vals(new_gids, gids.as_ptr() as *const _, gids.len() as u32);
-            from_glib_full(ffi::polkit_unix_process_new_pidfd(pidfd, uid, new_gids))
-        };
-        subject.dynamic_cast().expect("it should always work")
+                g_array_append_vals(new_gids, gids.as_ptr() as *const _, gids.len() as u32);
+                from_glib_full(ffi::polkit_unix_process_new_pidfd(pidfd, uid, new_gids))
+            };
+            subject.unsafe_cast()
+        }
     }
 
     #[doc(alias = "gids")]

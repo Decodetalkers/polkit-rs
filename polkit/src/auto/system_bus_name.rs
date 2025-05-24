@@ -31,7 +31,7 @@ impl SystemBusName {
     pub fn process_sync(
         &self,
         cancellable: Option<&impl IsA<gio::Cancellable>>,
-    ) -> Result<Option<Subject>, glib::Error> {
+    ) -> Result<Subject, glib::Error> {
         unsafe {
             let mut error = std::ptr::null_mut();
             let ret = ffi::polkit_system_bus_name_get_process_sync(
@@ -52,7 +52,7 @@ impl SystemBusName {
     pub fn user_sync(
         &self,
         cancellable: Option<&impl IsA<gio::Cancellable>>,
-    ) -> Result<Option<UnixUser>, glib::Error> {
+    ) -> Result<UnixUser, glib::Error> {
         unsafe {
             let mut error = std::ptr::null_mut();
             let ret = ffi::polkit_system_bus_name_get_user_sync(
@@ -78,9 +78,11 @@ impl SystemBusName {
 
     #[doc(alias = "polkit_system_bus_name_new")]
     pub fn new(name: &str) -> Self {
-        let subject: Subject =
-            unsafe { from_glib_full(ffi::polkit_system_bus_name_new(name.to_glib_none().0)) };
-        subject.dynamic_cast().expect("it should always work")
+        unsafe {
+            let subject: Subject =
+                from_glib_full(ffi::polkit_system_bus_name_new(name.to_glib_none().0));
+            subject.unsafe_cast()
+        }
     }
 
     #[doc(alias = "name")]

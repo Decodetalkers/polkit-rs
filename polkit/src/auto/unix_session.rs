@@ -50,7 +50,7 @@ impl UnixSession {
     }
 
     #[doc(alias = "polkit_unix_session_new_for_process")]
-    pub fn new_for_process<P: FnOnce(Result<Option<Subject>, glib::Error>) + 'static>(
+    pub fn new_for_process<P: FnOnce(Result<Self, glib::Error>) + 'static>(
         pid: i32,
         cancellable: Option<&impl IsA<gio::Cancellable>>,
         callback: P,
@@ -68,7 +68,7 @@ impl UnixSession {
         let user_data: Box_<glib::thread_guard::ThreadGuard<P>> =
             Box_::new(glib::thread_guard::ThreadGuard::new(callback));
         unsafe extern "C" fn new_for_process_trampoline<
-            P: FnOnce(Result<Option<Subject>, glib::Error>) + 'static,
+            P: FnOnce(Result<UnixSession, glib::Error>) + 'static,
         >(
             _source_object: *mut glib::gobject_ffi::GObject,
             res: *mut gio::ffi::GAsyncResult,
@@ -78,7 +78,8 @@ impl UnixSession {
                 let mut error = std::ptr::null_mut();
                 let ret = ffi::polkit_unix_session_new_for_process_finish(res, &mut error);
                 let result = if error.is_null() {
-                    Ok(from_glib_full(ret))
+                    let subject: Subject = from_glib_full(ret);
+                    Ok(subject.unsafe_cast())
                 } else {
                     Err(from_glib_full(error))
                 };
@@ -101,8 +102,7 @@ impl UnixSession {
 
     pub fn new_for_process_future(
         pid: i32,
-    ) -> Pin<Box_<dyn std::future::Future<Output = Result<Option<Subject>, glib::Error>> + 'static>>
-    {
+    ) -> Pin<Box_<dyn std::future::Future<Output = Result<Self, glib::Error>> + 'static>> {
         Box_::pin(gio::GioFuture::new(&(), move |_obj, cancellable, send| {
             Self::new_for_process(pid, Some(cancellable), move |res| {
                 send.resolve(res);
@@ -114,7 +114,7 @@ impl UnixSession {
     pub fn new_for_process_sync(
         pid: i32,
         cancellable: Option<&impl IsA<gio::Cancellable>>,
-    ) -> Result<Option<Subject>, glib::Error> {
+    ) -> Result<Self, glib::Error> {
         unsafe {
             let mut error = std::ptr::null_mut();
             let ret = ffi::polkit_unix_session_new_for_process_sync(
@@ -123,7 +123,8 @@ impl UnixSession {
                 &mut error,
             );
             if error.is_null() {
-                Ok(from_glib_full(ret))
+                let subject: Subject = from_glib_full(ret);
+                Ok(subject.unsafe_cast())
             } else {
                 Err(from_glib_full(error))
             }
