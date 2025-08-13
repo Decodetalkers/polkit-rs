@@ -21,7 +21,7 @@ jobs:
         steps:
             - name: Install Deps
               run: pacman -Syu --noconfirm base-devel clang polkit
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
             - uses: dtolnay/rust-toolchain@stable
               with:
                 components: clippy rustfmt
@@ -42,10 +42,10 @@ jobs:
         container:
           image: archlinux:latest
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
             - name: Install Deps
               run: pacman -Syu --noconfirm base-devel clang polkit
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
             - uses: dtolnay/rust-toolchain@stable
               with:
                 components: clippy rustfmt
