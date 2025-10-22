@@ -30,7 +30,7 @@ polkit-rs-sys = { version = "0.3.0", path = "./polkit-sys" }
 polkit-agent-rs-sys = { version = "0.3.0", path = "./polkit-agent-sys" }
 polkit-agent-rs = { version = "0.3.0", path = "./polkit-agent" }
 bitflags = "2"
-glib = "0.20"
+glib = "0.21"
 gio = "0.20"
 nix = "0.30"
 
