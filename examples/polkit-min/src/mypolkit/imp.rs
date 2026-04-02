@@ -132,7 +132,7 @@ impl ListenerImpl for MyPolkit {
     ) {
         let users: Vec<UnixUser> = identities
             .into_iter()
-            .flat_map(|idenifier| idenifier.dynamic_cast())
+            .flat_map(|identifier| identifier.dynamic_cast())
             .collect();
         let Some((name, index)) = choose_user(&users) else {
             cancellable.cancel();
