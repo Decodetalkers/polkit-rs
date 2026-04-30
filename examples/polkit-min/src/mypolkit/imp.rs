@@ -145,15 +145,9 @@ impl ListenerImpl for MyPolkit {
     }
     fn initiate_authentication_finish(
         &self,
-        gio_result: Result<gio::Task<Self::Message>, glib::Error>,
-    ) -> bool {
-        match gio_result {
-            Ok(_) => true,
-            Err(err) => {
-                println!("err: {err:?}");
-                false
-            }
-        }
+        _gio_result: gio::Task<Self::Message>,
+    ) -> Result<bool, glib::Error> {
+        Ok(true)
     }
 }
 

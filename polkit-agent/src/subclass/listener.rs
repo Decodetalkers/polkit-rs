@@ -9,6 +9,7 @@ use glib::object::Cast;
 use glib::translate::FromGlibPtrBorrow;
 use glib::translate::FromGlibPtrNone;
 use glib::translate::IntoGlib;
+use glib::translate::IntoGlibPtr;
 use glib::translate::from_glib_none;
 use glib::value::ValueType;
 use glib::{object::IsA, subclass::prelude::*};
@@ -86,15 +87,19 @@ unsafe extern "C" fn initiate_authentication_finish<T: ListenerImpl>(
 ) -> glib::ffi::gboolean {
     unsafe {
         let gio_result: gio::AsyncResult = from_glib_none(gio_result);
-        let error: Option<glib::Error> = from_glib_none(*error);
-        let finish_res_pre = error.map(Err);
-        let finish_res = finish_res_pre.unwrap_or(Ok(gio_result
+        let finish_res = gio_result
             .downcast::<gio::Task<T::Message>>()
-            .expect("Should can be downcasted")));
+            .expect("Should can be downcasted");
 
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
-        imp.initiate_authentication_finish(finish_res).into_glib()
+        match imp.initiate_authentication_finish(finish_res) {
+            Ok(result) => result.into_glib(),
+            Err(err) => {
+                *error = err.into_glib_ptr();
+                return false.into_glib();
+            }
+        }
     }
 }
 
@@ -117,8 +122,8 @@ pub trait ListenerImpl: ObjectImpl + ObjectSubclass<Type: IsA<Listener>> {
 
     fn initiate_authentication_finish(
         &self,
-        gio_result: Result<gio::Task<Self::Message>, glib::Error>,
-    ) -> bool;
+        gio_result: gio::Task<Self::Message>,
+    ) -> Result<bool, glib::Error>;
 }
 
 pub trait ListenerImplExt: ListenerImpl {}

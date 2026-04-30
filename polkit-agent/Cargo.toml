@@ -23,3 +23,4 @@ glib.workspace = true
 gio.workspace = true
 polkit-agent-rs-sys.workspace = true
 polkit-rs.workspace = true
+thiserror = "2.0.18"
