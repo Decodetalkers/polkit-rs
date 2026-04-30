@@ -97,7 +97,7 @@ unsafe extern "C" fn initiate_authentication_finish<T: ListenerImpl>(
             Ok(result) => result.into_glib(),
             Err(err) => {
                 *error = err.into_glib_ptr();
-                return false.into_glib();
+                false.into_glib()
             }
         }
     }
